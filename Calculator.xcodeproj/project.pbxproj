@@ -12,6 +12,7 @@
 		AF3196B91E2A9F7F000D9D4E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF3196B71E2A9F7F000D9D4E /* Main.storyboard */; };
 		AF3196BB1E2A9F80000D9D4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF3196BA1E2A9F80000D9D4E /* Assets.xcassets */; };
 		AF3196BE1E2A9F80000D9D4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF3196BC1E2A9F80000D9D4E /* LaunchScreen.storyboard */; };
+		AF3196C61E2AFD7C000D9D4E /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3196C51E2AFD7C000D9D4E /* CalculatorBrain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		AF3196BA1E2A9F80000D9D4E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF3196BD1E2A9F80000D9D4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AF3196BF1E2A9F80000D9D4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF3196C51E2AFD7C000D9D4E /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		AF3196B21E2A9F7F000D9D4E /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				AF3196C51E2AFD7C000D9D4E /* CalculatorBrain.swift */,
 				AF3196B31E2A9F7F000D9D4E /* AppDelegate.swift */,
 				AF3196B51E2A9F7F000D9D4E /* ViewController.swift */,
 				AF3196B71E2A9F7F000D9D4E /* Main.storyboard */,
@@ -136,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF3196C61E2AFD7C000D9D4E /* CalculatorBrain.swift in Sources */,
 				AF3196B61E2A9F7F000D9D4E /* ViewController.swift in Sources */,
 				AF3196B41E2A9F7F000D9D4E /* AppDelegate.swift in Sources */,
 			);
