@@ -37,6 +37,11 @@ struct CalculatorBrain {
     "+": Operation.binaryOperation({$0 + $1}),
     "-": Operation.binaryOperation({$0 - $1}),
     "÷": Operation.binaryOperation({$0 / $1}),
+    "sin": Operation.unaryOperation(sin),
+    "tan": Operation.unaryOperation(tan),
+    "x²": Operation.unaryOperation({pow($0, 2)}),
+    "x³": Operation.unaryOperation({pow($0, 3)}),
+    "xʸ": Operation.binaryOperation(pow),
     "=": Operation.equals
     ]
     mutating func performOperation (_ symbol: String){
