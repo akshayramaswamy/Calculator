@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         set{
             //newValue ex - if we use displayValue = 5, then newValue is 5
             display.text = String(newValue)
-            descriptionDisplay.text = brain.description
+            descriptionDisplay.text = brain.accumulatedDescription
         }
     }
     

@@ -19,10 +19,15 @@ struct CalculatorBrain {
     //internal var
     let maxValue = Int.max
     private var accumulator: Double?
-    private var resultIsPending = false
+    var resultIsPending: Bool {
+        get{
+            
+            return pendingBinaryOperation != nil
+        }
+    }
     
     
-    var description: String?{
+    private var description: String?{
         didSet {
             if pendingBinaryOperation == nil {
                 currOrder = maxValue
@@ -32,15 +37,19 @@ struct CalculatorBrain {
     
 
     //var accumulatedDescription:String?
-    var accumulatedDescription: String {
+    var accumulatedDescription: String? {
         get {
-            if pendingBinaryOperation == nil {
-                return description!
+            if !resultIsPending {
+                if description != nil {
+                return description! + "="
+                } else {
+                    return " "
+                }
             } else {
                 if String(pendingDescription!.currDescription) != description{
-                    return pendingDescription!.functionDescription(String(pendingDescription!.currDescription),description!)
+                    return pendingDescription!.functionDescription(String(pendingDescription!.currDescription),description!) + "..."
                 } else {
-                    return pendingDescription!.functionDescription(String(pendingDescription!.currDescription)," ")
+                    return pendingDescription!.functionDescription(String(pendingDescription!.currDescription)," ") + "..."
                 }
             }
             //return pendingDescription!.functionDescription(String(pendingDescription!.currDescription), String(pendingDescription!.currDescription) != description ? description! : "")
