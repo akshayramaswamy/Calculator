@@ -25,14 +25,14 @@ class ViewController: UIViewController {
             }
             let textCurrentlyInDisplay = display.text!
             display.text = textCurrentlyInDisplay + digit
-            descriptionDisplay.text = descriptionDisplay.text! + digit
+            //descriptionDisplay.text = descriptionDisplay.text! + digit
         } else {
             if digit == "."  {
                 display.text = "0" + digit
-                descriptionDisplay.text = "0" + digit
+                //descriptionDisplay.text = "0" + digit
             } else {
                 display.text = digit
-                descriptionDisplay.text = digit
+                //descriptionDisplay.text = digit
             }
             userIsInTheMiddleOfTyping = true
         }
@@ -64,6 +64,7 @@ class ViewController: UIViewController {
         //sets mathemcaticalSymbol if we can unwrap sender.currentTitle
         if let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
+            descriptionDisplay.text = brain.accumulatedDescription
         }
         if let result = brain.result {
             displayValue = result

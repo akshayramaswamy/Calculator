@@ -285,7 +285,7 @@
                                                         <rect key="frame" x="284" y="0.0" width="59" height="100"/>
                                                         <color key="backgroundColor" red="0.7791266026" green="0.7791266026" blue="0.7791266026" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                        <state key="normal" title="x²"/>
+                                                        <state key="normal" title="xʸ"/>
                                                         <connections>
                                                             <action selector="performOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2A8-qZ-jM3"/>
                                                         </connections>

@@ -29,16 +29,24 @@ struct CalculatorBrain {
             }
         }
     }
-    var accumulatedDescription:String?
-    //var accumulatedDescription: String {
-      //  get {
-       //     if pendingBinaryOperation == nil {
-       //         return description
-       //     } else {
-       //         return pendingDescription!.functionDescription(String(pendingDescription!.firstOperand), String(pendingDescription!.firstOperand) != description ? /description : "")
-       //     }
-       // }
-    //}
+    
+
+    //var accumulatedDescription:String?
+    var accumulatedDescription: String {
+        get {
+            if pendingBinaryOperation == nil {
+                return description!
+            } else {
+                if String(pendingDescription!.currDescription) != description{
+                    return pendingDescription!.functionDescription(String(pendingDescription!.currDescription),description!)
+                } else {
+                    return pendingDescription!.functionDescription(String(pendingDescription!.currDescription)," ")
+                }
+            }
+            //return pendingDescription!.functionDescription(String(pendingDescription!.currDescription), String(pendingDescription!.currDescription) != description ? description! : "")
+        }
+    }
+
 
     private var currOrder = Int.max
     
@@ -101,7 +109,7 @@ struct CalculatorBrain {
                     
                     accumulator = nil
                 }
-                
+
             case .equals:
                 performPendingBinaryOperation()
                 //performPendingDescription()
