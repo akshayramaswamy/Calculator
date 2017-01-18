@@ -55,6 +55,13 @@ class ViewController: UIViewController {
     //brain talks to model
     private var brain = CalculatorBrain()
     
+    @IBAction func clearCalculator(_ sender: UIButton) {
+        brain = CalculatorBrain()
+        displayValue = 0
+        descriptionDisplay.text = " "
+        userIsInTheMiddleOfTyping = false
+    }
+    
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping{
             brain.setOperand(displayValue)
