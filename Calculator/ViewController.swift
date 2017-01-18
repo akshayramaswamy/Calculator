@@ -14,7 +14,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var descriptionDisplay: UILabel!
     
     var userIsInTheMiddleOfTyping: Bool = false
-    //var userIsInTheMiddleOfTypingDecimal:Bool = false
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
@@ -25,14 +24,11 @@ class ViewController: UIViewController {
             }
             let textCurrentlyInDisplay = display.text!
             display.text = textCurrentlyInDisplay + digit
-            //descriptionDisplay.text = descriptionDisplay.text! + digit
         } else {
             if digit == "."  {
                 display.text = "0" + digit
-                //descriptionDisplay.text = "0" + digit
             } else {
                 display.text = digit
-                //descriptionDisplay.text = digit
             }
             userIsInTheMiddleOfTyping = true
         }
@@ -67,7 +63,6 @@ class ViewController: UIViewController {
             brain.setOperand(displayValue)
             userIsInTheMiddleOfTyping = false
         }
-        //descriptionDisplay.text = brain.description
         //sets mathemcaticalSymbol if we can unwrap sender.currentTitle
         if let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
@@ -76,7 +71,6 @@ class ViewController: UIViewController {
         if let result = brain.result {
             displayValue = result
         }
-        //descriptionDisplay.text = brain.description
     }
 
 }
