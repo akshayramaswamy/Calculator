@@ -51,6 +51,7 @@ class ViewController: UIViewController {
     //brain talks to model
     private var brain = CalculatorBrain()
     
+    
     @IBAction func clearCalculator(_ sender: UIButton) {
         brain = CalculatorBrain()
         displayValue = 0
