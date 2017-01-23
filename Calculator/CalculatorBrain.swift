@@ -13,22 +13,32 @@ import Foundation
 
 struct CalculatorBrain {
     
+    private enum CalculatorInput{
+        case operation(String)
+        case operand(Double)
+        case variable(String)
+    }
+    private var allInputs =  [CalculatorInput]()
     
     let maxValue = Int.max //constant that represents maximum possible value, used later when setting order of operations
-    private var accumulator: Double?
     
-    var resultIsPending: Bool {
+    
+    var pendingResult: Bool {
         get{
-            return pendingBinaryOperation != nil
+            return evaluate().result == nil && evaluate().description == ""
+        }
+    }
+    
+    var result: Double? {
+        get{
+            return evaluate().result
         }
     }
     
     //private var so that public cannot change order precedence
-    private var description: String?{
-        didSet {
-            if pendingBinaryOperation == nil {
-                currOrder = maxValue //currOrder helps us place parathentheses in the right order in the display
-            }
+    var accumulatedDescription: String?{
+        get{
+            return evaluate().description
         }
     }
     
@@ -38,28 +48,10 @@ struct CalculatorBrain {
      * returns the partial description with '...'
      *
      */
-    var accumulatedDescription: String? {
-        get {
-            if !resultIsPending {
-                if description != nil {
-                    return description! + "="
-                } else {
-                    return " " //in the case where the calculator is cleared
-                }
-            } else {
-                 let partialDescription = pendingDescription!.currDescription
-                if partialDescription != description {
-                    return pendingDescription!.functionDescription(partialDescription,description!) + "..."
-                } else {
-                    return pendingDescription!.functionDescription(partialDescription," ") + "..."
-                }
-            }
-            
-        }
-    }
+
     
     //currOrder helps us place parathentheses in the right order in the display. Set to max Int value intially
-    private var currOrder = Int.max
+    
     
     
     private enum Operation{
@@ -102,55 +94,13 @@ struct CalculatorBrain {
     
     
     mutating func performOperation (_ symbol: String){
-        if let operation = operations[symbol]{
-            switch operation{
-            case .constant(let value):
-                accumulator = value
-                description = symbol
-            case .unaryOperation(let function, let functionDescription):
-                if accumulator != nil {
-                    accumulator = function(accumulator!)
-                    description = functionDescription(description!) // passes description as arg to associated function in operations
-                }
-            case .binaryOperation(let function, let functionDescription, let order):
-                performPendingBinaryOperation()
-                if order > currOrder  {
-                    description = "(" + description! + ")" //sets parentheses based on order precedence
-                }
-                
-                currOrder = order
-                //sets the first operand for the calculator description to the current description
-                pendingDescription = PendingDescription(currDescription: description!,functionDescription: functionDescription)
-                if accumulator != nil{
-                    // sets the first operand for the binary operation
-                    pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
-                    accumulator = nil
-                }
-                
-            case .equals:
-                performPendingBinaryOperation()
-                
-            }
-        }
+        allInputs.append(CalculatorInput.operation(symbol))
+        
     }
     
     
-    private mutating func performPendingBinaryOperation(){
-        if pendingDescription != nil {
-            description = pendingDescription!.perform(with: description!)
-            pendingDescription = nil
-            
-        }
-        if pendingBinaryOperation != nil && accumulator != nil {
-            accumulator = pendingBinaryOperation!.perform(with: accumulator!)
-            pendingBinaryOperation = nil
-            
-        }
-        
-        
-    }
-    private var pendingBinaryOperation: PendingBinaryOperation?
-    private var pendingDescription: PendingDescription?
+    
+    
     
     /* struct: Pending Description:
      * This struct mirrors PendingBinaryOperation, in that returns the associated value string representation for a binary operation,
@@ -181,20 +131,122 @@ struct CalculatorBrain {
     }
     
     mutating func setOperand(_ operand: Double) {
-        accumulator = operand
-        description = String(operand)
+        allInputs.append(CalculatorInput.operand(operand))
     }
-    func setOperand(variable named: String) {
-        
-    }
-    func evaluate(using variables: Dictionary<String,Double>? = nil) -> (result: Double?, description: String){
-            
+    mutating func setOperand(variable named: String) {
+        allInputs.append(CalculatorInput.variable(named))
     }
     
-    var result: Double? {
-        get{
-            return accumulator
+    
+    func evaluate(using variables: Dictionary<String,Double>? = nil) -> (result: Double?, description: String){
+        var accumulator: Double?
+        var currOrder = Int.max
+        var pendingBinaryOperation: PendingBinaryOperation?
+        var pendingDescription: PendingDescription?
+        var resultIsPending: Bool {
+            get{
+                return pendingBinaryOperation != nil
+            }
         }
+        var description: String?{
+            didSet {
+                if pendingBinaryOperation == nil {
+                    currOrder = maxValue //currOrder helps us place parathentheses in the right order in the display
+                }
+            }
+        }
+        
+        var result: Double? {
+            get{
+                return accumulator
+            }
+        }
+        
+        var accumulatedDescription: String? {
+            get {
+                if !resultIsPending {
+                    if description != nil {
+                        return description! + "="
+                    } else {
+                        return " " //in the case where the calculator is cleared
+                    }
+                } else {
+                    let partialDescription = pendingDescription!.currDescription
+                    if partialDescription != description {
+                        return pendingDescription!.functionDescription(partialDescription,description!) + "..."
+                    } else {
+                        return pendingDescription!.functionDescription(partialDescription," ") + "..."
+                    }
+                }
+                
+            }
+        }
+        
+        func performPendingBinaryOperation(){
+            if pendingDescription != nil {
+                description = pendingDescription!.perform(with: description!)
+                pendingDescription = nil
+                
+            }
+            if pendingBinaryOperation != nil && accumulator != nil {
+                accumulator = pendingBinaryOperation!.perform(with: accumulator!)
+                pendingBinaryOperation = nil
+                
+            }
+            
+            
+        }
+        
+        for input in allInputs{
+            switch input{
+            case .operand(let value):
+                accumulator = value
+                description = String(value)
+                
+            case .variable(let value):
+                accumulator = variables?[value]
+                
+            case .operation(let symbol):
+                if let operation = operations[symbol]{
+                    switch operation{
+                    case .constant(let value):
+                        accumulator = value
+                        description = symbol
+                    case .unaryOperation(let function, let functionDescription):
+                        if accumulator != nil {
+                            accumulator = function(accumulator!)
+                            description = functionDescription(description!) // passes description as arg to associated function in operations
+                        }
+                    case .binaryOperation(let function, let functionDescription, let order):
+                        performPendingBinaryOperation()
+                        if order > currOrder  {
+                            description = "(" + description! + ")" //sets parentheses based on order precedence
+                        }
+                        
+                        currOrder = order
+                        //sets the first operand for the calculator description to the current description
+                        pendingDescription = PendingDescription(currDescription: description!,functionDescription: functionDescription)
+                        if accumulator != nil{
+                            // sets the first operand for the binary operation
+                            pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                            accumulator = nil
+                        }
+                        
+                    case .equals:
+                        performPendingBinaryOperation()
+                        
+                    }
+                }
+            }
+            
+            
+        }
+        return (result, accumulatedDescription!)
+        
+        
+        
     }
+    
+    
     
 }
