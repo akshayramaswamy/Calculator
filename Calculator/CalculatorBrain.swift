@@ -13,11 +13,18 @@ import Foundation
 
 struct CalculatorBrain {
     
+    /* enum: CalculatorInput
+     * Enum to represent each type that array can hold (operations like +,-, operands, and variables like M)
+     */
     private enum CalculatorInput{
         case operation(String)
         case operand(Double)
         case variable(String)
     }
+    
+    /* array: allInputs
+     * This array stores all inputs as a CalculatorInput, which has 3 cases: operands, operations, and variables
+     */
     private var allInputs =  [CalculatorInput]()
     
     let maxValue = Int.max //constant that represents maximum possible value, used later when setting order of operations
@@ -29,28 +36,19 @@ struct CalculatorBrain {
         }
     }
     
+    /* Deprecated - returns result from new evaluate function */
     var result: Double? {
         get{
             return evaluate().result
         }
     }
     
-    //private var so that public cannot change order precedence
+    /* Deprecated - returns description from new evaluate function */
     var description: String?{
         get{
             return evaluate().description
         }
     }
-    
-    /* ComputedValue: accumulatedDescription
-     * This public var returns the current description with an
-     * '=' if the result is no longer pending, otherwise it
-     * returns the partial description with '...'
-     *
-     */
-
-    
-    //currOrder helps us place parathentheses in the right order in the display. Set to max Int value intially
     
     
     
@@ -93,11 +91,19 @@ struct CalculatorBrain {
     ]
     
     
+    /* function: performOperation()
+     * Adds new operations to the global allInputs array as
+     * CalculatorInput type operation
+     */
     mutating func performOperation (_ symbol: String){
         allInputs.append(CalculatorInput.operation(symbol))
         
     }
     
+    /* function: undo
+     * Reverts last operation entered into calculator by
+     * deleting last index in allInputs array
+     */
     mutating func undo(){
         if (!allInputs.isEmpty){
             allInputs.removeLast()
@@ -135,17 +141,34 @@ struct CalculatorBrain {
         
     }
     
+    /* function: setOperand()
+     * Adds new operands to the global allInputs array as
+     * CalculatorInput type operand
+     */
     mutating func setOperand(_ operand: Double) {
         allInputs.append(CalculatorInput.operand(operand))
     }
+    
+    /* function: setOperand()
+     * Adds new variables to the global allInputs array as
+     * CalculatorInput type variable
+     */
     mutating func setOperand(variable named: String) {
         allInputs.append(CalculatorInput.variable(named))
     }
     
     
+    /* function: evaluate
+     * The heart of the Calculator brain. Takes in a dictionary from view 
+     * controller that has values of all variables set, and returns result and 
+     * description at that point.
+     * The result and description are recomputed everytime evaluate is called
+     * by iterating through the allInputs array.
+     *
+     */
     func evaluate(using variables: Dictionary<String,Double>? = nil) -> (result: Double?, description: String){
         var accumulator: Double?
-        var currOrder = Int.max
+        var currOrder = Int.max //currOrder helps us place parathentheses in the right order in the display. Set to max Int value intially
         var pendingBinaryOperation: PendingBinaryOperation?
         var pendingDescription: PendingDescription?
         var resultIsPending: Bool {
@@ -167,6 +190,12 @@ struct CalculatorBrain {
             }
         }
         
+        /* ComputedValue: accumulatedDescription
+         * This var returns the current description with an
+         * '=' if the result is no longer pending, otherwise it
+         * returns the partial description with '...'
+         *
+         */
         var accumulatedDescription: String? {
             get {
                 if !resultIsPending {
@@ -187,6 +216,7 @@ struct CalculatorBrain {
             }
         }
         
+        
         func performPendingBinaryOperation(){
             if pendingDescription != nil {
                 description = pendingDescription!.perform(with: description!)
@@ -202,18 +232,21 @@ struct CalculatorBrain {
             
         }
         
+        /* This for loop iterated through the allInputs array. Three cases are 
+         * created based on the CalculatorInput enum type in the array.
+         */
         for input in allInputs{
-            
             switch input{
-                
+            //case operand: sets accumulator and description to
+                //value at the specified index
             case .operand(let value):
                 accumulator = value
                 description = String(value)
-                
+            // case variable: sets accumulator to either value from dictionary passed in or 0 as the default.
             case .variable(let value):
-                
                 accumulator = variables?[value] ?? 0
                 description = value
+            // case operation: splits into constant, unary operation, binary operation, or equals cases
             case .operation(let symbol):
                 if let operation = operations[symbol]{
                     switch operation{
