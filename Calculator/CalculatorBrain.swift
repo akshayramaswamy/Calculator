@@ -98,7 +98,14 @@ struct CalculatorBrain {
         
     }
     
-    
+    mutating func undo(){
+        if (!allInputs.isEmpty){
+            allInputs.removeLast()
+        } else{
+            
+        }
+        
+    }
     
     
     
@@ -198,7 +205,9 @@ struct CalculatorBrain {
         }
         
         for input in allInputs{
+            
             switch input{
+                
             case .operand(let value):
                 accumulator = value
                 description = String(value)

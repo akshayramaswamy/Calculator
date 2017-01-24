@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var mValue: UILabel!
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var descriptionDisplay: UILabel!
     
@@ -44,7 +45,8 @@ class ViewController: UIViewController {
         set{
             //newValue ex - if we use displayValue = 5, then newValue is 5
             display.text = String(newValue)
-            descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
+            
+            //descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
         }
     }
     
@@ -58,23 +60,47 @@ class ViewController: UIViewController {
         }
         //descriptionDisplay.text = brain.evaluate().description
     }
+    @IBAction func undo(_ sender: UIButton) {
+        if !userIsInTheMiddleOfTyping {
+            brain.undo()
+            if let result = brain.evaluate(using: variableDictionary).result {
+                displayValue = result
+            }
+            descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
+        } else {
+            var digit = display.text!
+            digit.remove(at: digit.index(before: digit.endIndex))
+            //var digit = display.text!
+            //digit.remove(at: digit.endIndex)
+            display.text = digit
+            if display.text == "" {
+                displayValue = 0.0
+                userIsInTheMiddleOfTyping = false
+            }
+        }
+    }
     
     @IBAction func createM(_ sender: UIButton) {
         variableDictionary["M"] = displayValue
         //print (variableDictionary["M"])
         //descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
-        print("no")
+        mValue.text = String(displayValue)
+        
         if let result = brain.evaluate(using: variableDictionary).result {
-            print ("yo")
+            
             displayValue = result
+            //descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
         }
         
     }
+
     
     @IBAction func clearCalculator(_ sender: UIButton) {
         brain = CalculatorBrain()
         displayValue = 0
         descriptionDisplay.text = " "
+        mValue.text = " "
+        variableDictionary = [:]
         userIsInTheMiddleOfTyping = false
     }
     
@@ -90,6 +116,7 @@ class ViewController: UIViewController {
         }
         if let result = brain.evaluate(using: variableDictionary).result {
             displayValue = result
+            descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
         }
     }
 
