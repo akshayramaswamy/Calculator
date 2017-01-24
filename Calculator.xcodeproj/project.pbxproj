@@ -303,6 +303,7 @@
 				AF3196C41E2A9F80000D9D4E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
