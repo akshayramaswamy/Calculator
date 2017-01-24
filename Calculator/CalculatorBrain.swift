@@ -101,8 +101,6 @@ struct CalculatorBrain {
     mutating func undo(){
         if (!allInputs.isEmpty){
             allInputs.removeLast()
-        } else{
-            
         }
         
     }

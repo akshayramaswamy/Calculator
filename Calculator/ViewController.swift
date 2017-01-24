@@ -85,7 +85,7 @@ class ViewController: UIViewController {
         //print (variableDictionary["M"])
         //descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
         mValue.text = String(displayValue)
-        
+        userIsInTheMiddleOfTyping = false
         if let result = brain.evaluate(using: variableDictionary).result {
             
             displayValue = result
