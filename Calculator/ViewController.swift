@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var descriptionDisplay: UILabel!
     
     var userIsInTheMiddleOfTyping: Bool = false
-    
+    var variableDictionary = Dictionary<String, Double>()
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
         
@@ -44,13 +44,32 @@ class ViewController: UIViewController {
         set{
             //newValue ex - if we use displayValue = 5, then newValue is 5
             display.text = String(newValue)
-            descriptionDisplay.text = brain.accumulatedDescription
+            descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
         }
     }
     
     //brain talks to model
     private var brain = CalculatorBrain()
+    @IBAction func useM(_ sender: UIButton) {
+        
+        brain.setOperand(variable: sender.currentTitle!)
+        if let result = brain.evaluate(using: variableDictionary).result {
+            displayValue = result
+        }
+        //descriptionDisplay.text = brain.evaluate().description
+    }
     
+    @IBAction func createM(_ sender: UIButton) {
+        variableDictionary["M"] = displayValue
+        //print (variableDictionary["M"])
+        //descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
+        print("no")
+        if let result = brain.evaluate(using: variableDictionary).result {
+            print ("yo")
+            displayValue = result
+        }
+        
+    }
     
     @IBAction func clearCalculator(_ sender: UIButton) {
         brain = CalculatorBrain()
@@ -67,9 +86,9 @@ class ViewController: UIViewController {
         //sets mathemcaticalSymbol if we can unwrap sender.currentTitle
         if let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
-            descriptionDisplay.text = brain.accumulatedDescription
+            descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
         }
-        if let result = brain.result {
+        if let result = brain.evaluate(using: variableDictionary).result {
             displayValue = result
         }
     }

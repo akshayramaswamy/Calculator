@@ -23,9 +23,9 @@ struct CalculatorBrain {
     let maxValue = Int.max //constant that represents maximum possible value, used later when setting order of operations
     
     
-    var pendingResult: Bool {
+    var resultIsPending: Bool {
         get{
-            return evaluate().result == nil && evaluate().description == ""
+            return evaluate().result == nil && !(evaluate().description == "")
         }
     }
     
@@ -36,7 +36,7 @@ struct CalculatorBrain {
     }
     
     //private var so that public cannot change order precedence
-    var accumulatedDescription: String?{
+    var description: String?{
         get{
             return evaluate().description
         }
@@ -204,8 +204,9 @@ struct CalculatorBrain {
                 description = String(value)
                 
             case .variable(let value):
-                accumulator = variables?[value]
                 
+                accumulator = variables?[value] ?? 0
+                description = value
             case .operation(let symbol):
                 if let operation = operations[symbol]{
                     switch operation{
