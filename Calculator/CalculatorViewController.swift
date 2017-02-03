@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
     
     @IBOutlet weak var mValue: UILabel!
     @IBOutlet weak var display: UILabel!
@@ -126,6 +126,27 @@ class ViewController: UIViewController {
         if let result = brain.evaluate(using: variableDictionary).result {
             displayValue = result
             descriptionDisplay.text = brain.evaluate(using: variableDictionary).description
+        }
+    }
+    
+    @IBOutlet weak var graphDisplay: UILabel!
+    @IBAction func graphEquation(_ sender: UIButton) {
+        graphDisplay.text = "Equation Graphed: y = " + String(brain.evaluate().description.characters.dropLast())
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var destinationController = segue.destination
+        if let navController = destinationController as? UINavigationController {
+            destinationController = navController.visibleViewController ?? destinationController
+        }
+        
+        if let graphViewController = destinationController as? GraphViewController {
+            //vc.navigationItem.title = brain.description
+            
+            //graphViewController.graphView?.convertToY = brain.evaluate
+            
+            graphViewController.convertToY = brain.evaluate
+            
         }
     }
     
