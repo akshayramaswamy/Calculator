@@ -11,6 +11,8 @@ import UIKit
 @IBDesignable class GraphView: UIView {
     
     private var drawer = AxesDrawer(color: UIColor.blue)
+    
+    /* This variable is set to a function that returns the Y-Value for a given X-value. We pass it the evaluate function in this case */
     var convertToY: ((Dictionary<String,Double>? ) -> (result: Double?, description: String))?{
         didSet{
             setNeedsDisplay()
@@ -38,6 +40,9 @@ import UIKit
         
     }
     
+    /* Method: drawLine:
+     * This method draws the curve we want to graph by iterating through each possible x-value and drawing a line to the respective y-value.
+     */
     func drawLine(bounds: CGRect, origin: CGPoint, scale: CGFloat){
         lineColor.set()
         let path = UIBezierPath()
@@ -49,6 +54,7 @@ import UIKit
             variableDictionary["M"] = Double((xPoint - origin.x) / scale)
             if let y = convertToY?(variableDictionary).result {
             yPoint = origin.y - CGFloat(y) * scale
+            //emptyPath is true if we haven't set the first point
             if (emptyPath){
                 path.move(to: CGPoint(x: xPoint, y: yPoint))
                 emptyPath = false
@@ -60,11 +66,6 @@ import UIKit
         path.lineWidth = lineWidth
         path.stroke()
     }
-    
-
-    
-
-    
     
 
 }

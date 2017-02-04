@@ -95,7 +95,7 @@ class CalculatorViewController: UIViewController {
      */
     @IBAction func createM(_ sender: UIButton) {
         variableDictionary["M"] = displayValue
-        mValue.text = String(displayValue)
+        mValue.text = "Variable: M = " + String(displayValue)
         userIsInTheMiddleOfTyping = false
         if let result = brain.evaluate(using: variableDictionary).result {
             displayValue = result
@@ -133,6 +133,7 @@ class CalculatorViewController: UIViewController {
     @IBAction func graphEquation(_ sender: UIButton) {
         graphDisplay.text = "Equation Graphed: y = " + String(brain.evaluate().description.characters.dropLast())
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var destinationController = segue.destination
