@@ -17,19 +17,21 @@ class GraphViewController: UIViewController {
 
     didSet {
         //pinch handler
-        let pinchHandler = #selector(GraphView.changeScale(byReactingTo:))
-        let pinchRecognizer = UIPinchGestureRecognizer(target: graphView, action: pinchHandler)
+        let pinchHandler = #selector(changeScale(byReactingTo:))
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: pinchHandler)
         graphView.addGestureRecognizer(pinchRecognizer)
         
         //tap recognizer
-        let tapHandler = #selector(GraphView.twoTaps(byReactingTo:))
-        let tapRecognizer = UITapGestureRecognizer(target: graphView, action: tapHandler)
+        let tapHandler = #selector(twoTaps(byReactingTo:))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: tapHandler)
+       // let tapHandler = #selector(self.twoTaps(byReactingTo:))
+         //let tapRecognizer = UITapGestureRecognizer(target: graphView, action: tapHandler)
         tapRecognizer.numberOfTapsRequired = 2
         graphView.addGestureRecognizer(tapRecognizer)
         
         // pan recognizer
-        let panHandler = #selector(GraphView.changePan(byReactingTo:))
-        let panRecognizer = UIPanGestureRecognizer(target:graphView, action: panHandler)
+        let panHandler = #selector(changePan(byReactingTo:))
+        let panRecognizer = UIPanGestureRecognizer(target:self, action: panHandler)
         graphView.addGestureRecognizer(panRecognizer)
         }
     }
@@ -37,6 +39,43 @@ class GraphViewController: UIViewController {
     override func viewDidLoad() {
             graphView?.convertToY = convertToY
         
+    }
+    
+    func changeScale(byReactingTo pinchRecognizer: UIPinchGestureRecognizer)
+    {
+        switch pinchRecognizer.state {
+        case .changed,.ended:
+            graphView.scale *= pinchRecognizer.scale
+            pinchRecognizer.scale = 1
+        default:
+            break
+        }
+    }
+    
+    func twoTaps(byReactingTo tapRecognizer: UITapGestureRecognizer)
+    {
+        if tapRecognizer.state == .ended {
+            let newOrigin = tapRecognizer.location(in: graphView)
+            graphView.origin = graphView.convert(newOrigin, to: graphView)
+        }
+        
+    }
+    
+    func changePan(byReactingTo panRecognizer: UIPanGestureRecognizer)
+    {
+        switch panRecognizer.state {
+        case .changed: fallthrough
+        case .ended:
+            graphView.origin.x += panRecognizer.translation(in: graphView).x
+            graphView.origin.y += panRecognizer.translation(in: graphView).y
+            
+            panRecognizer.setTranslation(CGPoint.zero, in: graphView)
+            //origin = panRecognizer.location(in: self)
+            
+            //scale *= pinchRecognizer.scale
+        //pinchRecognizer.scale = 1
+        default:break
+        }
     }
 
 

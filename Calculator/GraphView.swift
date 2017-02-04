@@ -61,40 +61,10 @@ import UIKit
         path.stroke()
     }
     
-    func changeScale(byReactingTo pinchRecognizer: UIPinchGestureRecognizer)
-    {
-        switch pinchRecognizer.state {
-        case .changed,.ended:
-            scale *= pinchRecognizer.scale
-            pinchRecognizer.scale = 1
-        default:
-            break
-        }
-    }
-    
-    func twoTaps(byReactingTo tapRecognizer: UITapGestureRecognizer)
-    {
-        if tapRecognizer.state == .ended {
-            let newOrigin = tapRecognizer.location(in: self)
-            origin = self.convert(newOrigin, to: self)
-        }
 
-    }
     
-    func changePan(byReactingTo panRecognizer: UIPanGestureRecognizer)
-    {
-        switch panRecognizer.state {
-        case .changed: fallthrough
-        case .ended:
-            origin.x = origin.x + panRecognizer.translation(in: self).x
-            origin.y = origin.y + panRecognizer.translation(in: self).y
-            
-            panRecognizer.setTranslation(CGPoint.zero, in: self)
-            //origin = panRecognizer.location(in: self)
-            
-            //scale *= pinchRecognizer.scale
-            //pinchRecognizer.scale = 1
-        default:break
-        }
-    }
+
+    
+    
+
 }

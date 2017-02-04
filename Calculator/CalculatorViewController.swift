@@ -141,10 +141,6 @@ class CalculatorViewController: UIViewController {
         }
         
         if let graphViewController = destinationController as? GraphViewController {
-            //vc.navigationItem.title = brain.description
-            
-            //graphViewController.graphView?.convertToY = brain.evaluate
-            
             graphViewController.convertToY = brain.evaluate
             
         }
